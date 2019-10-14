@@ -3,6 +3,14 @@ const {PubSub} = require('@google-cloud/pubsub');
 const topicName = process.env.TOPIC_NAME || "layer-events-test";
 const { log, error: log_error } = require("./logger")()
 
+{ WEBHOOK_SECRET } = process.env
+
+
+if (!WEBHOOK_SECRET) {
+  throw new Error "WEBHOOK_SECRET env var not set"
+}
+
+
 const handleEvent = async (rawBody) => {
   if (log.enabled) {
     log("event:", rawBody.toString();
@@ -39,11 +47,7 @@ module.exports.layer = async (req, res) => {
 
     const signature = req.headers['layer-webhook-signature'];
 
-    if (!process.env.WEBHOOK_SECRET) {
-      log('WEBHOOK_SECRET is not defined!');
-    }
-
-    const hmac = crypto.createHmac('sha1', process.env.WEBHOOK_SECRET);
+    const hmac = crypto.createHmac('sha1', WEBHOOK_SECRET);
 
     hmac.update(req.body);
 
