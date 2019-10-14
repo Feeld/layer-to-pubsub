@@ -3,13 +3,12 @@ const {PubSub} = require('@google-cloud/pubsub');
 const topicName = process.env.TOPIC_NAME || "layer-events-test";
 const { log, error: log_error } = require("./logger")()
 
-{ WEBHOOK_SECRET } = process.env
+const { WEBHOOK_SECRET } = process.env
 
 
 if (!WEBHOOK_SECRET) {
   throw new Error "WEBHOOK_SECRET env var not set"
 }
-
 
 const handleEvent = async (rawBody) => {
   if (log.enabled) {
