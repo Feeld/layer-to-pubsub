@@ -7,7 +7,7 @@ const { WEBHOOK_SECRET } = process.env
 
 
 if (!WEBHOOK_SECRET) {
-  throw new Error "WEBHOOK_SECRET env var not set"
+  throw new Error("WEBHOOK_SECRET env var not set")
 }
 
 const handleEvent = async (rawBody) => {
