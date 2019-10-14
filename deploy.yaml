@@ -1,0 +1,13 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - beta
+  - functions
+  - deploy
+  - --trigger-http
+  - --source=.
+  - --entry-point=layer
+  - --runtime=nodejs8
+  - --region=us-east4
+  - layer-to-pubsub
+  - --service-account=layer-to-pubsub-webhook@${PROJECT_ID}.iam.gserviceaccount.com

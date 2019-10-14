@@ -1,0 +1,9 @@
+{
+    "name": "layer-to-pubsub",
+    "version": "1.0.0",
+    "description": "Function for ingesting layer events.",
+    "main": "handler.js",
+    "dependencies": {
+        "@google-cloud/pubsub": "^1.1.2"
+    }
+}
