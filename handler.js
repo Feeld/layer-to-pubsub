@@ -1,18 +1,25 @@
 const crypto = require('crypto');
 const {PubSub} = require('@google-cloud/pubsub');
-const topicName = process.env.TOPIC_NAME || "layer-events";
+const topicName = process.env.TOPIC_NAME || "layer-events-test";
+const debug = Boolean(Number(process.env.DEBUG))
+
+function log () {
+  if (debug) {
+    console.log.apply(console, arguments)
+  }
+}
 
 const handleEvent = async (data) => {
 
   log("data:", data);
 
   const pubsub = new PubSub();
+  const [topic] = await pubsub.createTopic(topicName)
 
   const dataBuffer = Buffer.from(data);
 
-  const messageId = await pubsub.topic(topicName).publish(dataBuffer);
-  console.log(`Message ${messageId} published.`);
-
+  const messageId = await topic(topicName).publish(dataBuffer);
+  log(`Message ${messageId} published.`);
 }
 
 module.exports.handleEvent = handleEvent;
