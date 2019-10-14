@@ -16,9 +16,8 @@ const handleEvent = async (rawBody) => {
   }
 
   const pubsub = new PubSub();
-  const [topic] = await pubsub.createTopic(topicName)
 
-  const messageId = await topic(topicName).publish(rawBody);
+  const messageId = await pubsub.topic(topicName).publish(rawBody);
   log(`Message ${messageId} published.`);
 }
 
@@ -68,7 +67,7 @@ module.exports.layer = async (req, res) => {
       // all possible errors and not return a 500 once we deploy to prod
       // since returning a 500 will eventually disable the webhook on layer side
       // and interrupt a syncing process
-      res.status(500).json({ error : error.message });
+      return res.status(500).send('');
     };
 
     log("respond with 204");
