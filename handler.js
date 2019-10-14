@@ -12,7 +12,7 @@ if (!WEBHOOK_SECRET) {
 
 const handleEvent = async (rawBody) => {
   if (log.enabled) {
-    log("event:", rawBody.toString();
+    log("event:", rawBody.toString());
   }
 
   const pubsub = new PubSub();
