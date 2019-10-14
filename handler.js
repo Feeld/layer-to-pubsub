@@ -5,6 +5,8 @@ const { log, error: log_error } = require("./logger")()
 
 const { WEBHOOK_SECRET } = process.env
 
+const pubsub = new PubSub();
+const topic = pubsub.topic(topicName)
 
 if (!WEBHOOK_SECRET) {
   throw new Error("WEBHOOK_SECRET env var not set")
@@ -14,10 +16,7 @@ const handleEvent = async (rawBody) => {
   if (log.enabled) {
     log("event:", rawBody.toString());
   }
-
-  const pubsub = new PubSub();
-
-  const messageId = await pubsub.topic(topicName).publish(rawBody);
+  const messageId = await topic.publish(rawBody);
   log(`Message ${messageId} published.`);
 }
 
