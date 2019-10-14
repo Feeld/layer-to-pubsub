@@ -1,24 +1,17 @@
 const crypto = require('crypto');
 const {PubSub} = require('@google-cloud/pubsub');
 const topicName = process.env.TOPIC_NAME || "layer-events-test";
-const debug = Boolean(Number(process.env.DEBUG))
+const { log, error: log_error } = require("./logger")()
 
-function log () {
-  if (debug) {
-    console.log.apply(console, arguments)
+const handleEvent = async (rawBody) => {
+  if (log.enabled) {
+    log("event:", rawBody.toString();
   }
-}
-
-const handleEvent = async (data) => {
-
-  log("data:", data);
 
   const pubsub = new PubSub();
   const [topic] = await pubsub.createTopic(topicName)
 
-  const dataBuffer = Buffer.from(data);
-
-  const messageId = await topic(topicName).publish(dataBuffer);
+  const messageId = await topic(topicName).publish(rawBody);
   log(`Message ${messageId} published.`);
 }
 
@@ -34,7 +27,7 @@ module.exports.layer = async (req, res) => {
   else {
     log('received non GET request:')
 
-    const data = req.rawBody;
+    const rawBody = req.rawBody;
     // - validate the payload
     // - parse the layer webhook event
     // - figure out the corresponding stream channel
@@ -64,7 +57,7 @@ module.exports.layer = async (req, res) => {
     }
 
     try {
-      await handleEvent(data);
+      await handleEvent(rawBody);
     }
     catch (error) {
       log_error(error);
